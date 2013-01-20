@@ -10,6 +10,9 @@ var bg; //the bitmap object using easeljs
 var btnSrc = new Image();
 var btn;
 
+// Create text
+var msg = new createjs.Text('Hello World!', 'Bold 25px Arial', '#EEE');
+
 // Variables
 var centerX = 275;
 var centerY = 150;
@@ -31,6 +34,8 @@ function Main()
 	btnSrc.src = 'button.png';
 	btnSrc.name = 'button';
 	btnSrc.onload = loadGfx;
+
+	
 
 	// Ticker
 	createjs.Ticker.setFPS(30);
@@ -57,33 +62,26 @@ function buildInterface(){
 	btn.x = centerX -40;
 	btn.y = centerY - 12;
 
-	stage.addChild(bg,btn);
+	msg.x = centerX - 70;
+	msg.y = centerY;
+	msg.alpha = 0;
+
+	stage.addChild(bg,btn,msg);
 	stage.update(); //Very important
 
 	//add button listener
-	btn.onPress = showText;
+	btn.onPress = toggle;	
 }
 
-function showText(){
-	console.log('This works like trace!');
+function toggle(){
 
-	// Remove listener
-	btn.onPress = null;
-
-	// Create text
-
-	var msg = new Text('Hello World!', 'Bold 25px Arial', '#EEE');
-
-	msg.x = centerX - 70;
-	msg.y = centerY;
-
-	stage.addChild(msg);
-	msg.alpha = 0;
-
-	// Animation
-
-	Tween.get(btn).to({y:centerY + 50}, 300);
-	Tween.get(msg).wait(400).to({alpha: 1}, 400);
+	if(btn.y <= centerY){
+		createjs.Tween.get(btn).to({y:centerY + 50}, 700, createjs.Ease.circInOut);
+		createjs.Tween.get(msg).wait(400).to({alpha: 1}, 400);
+	}else{
+		createjs.Tween.get(msg).to({alpha: 0}, 400);
+		createjs.Tween.get(btn).wait(100).to({y:centerY}, 700, createjs.Ease.circInOut);		
+	}
 }
 
 
